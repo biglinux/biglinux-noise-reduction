@@ -1,0 +1,227 @@
+#!/bin/bash
+
+#Translation
+export TEXTDOMAINDIR="/usr/share/locale"
+export TEXTDOMAIN=biglinux-remove-noise-mic
+
+# Don't group windows
+xprop -id "$(xprop -root '\t$0' _NET_ACTIVE_WINDOW | cut -f 2)" -f WM_CLASS 8s -set WM_CLASS "$$"
+
+FOLDER_CONFIG="$HOME/.config/biglinux-noise-reduction"
+mkdir -p ~/.config/biglinux-noise-reduction
+
+MIC_LIST="$(pactl list sources short | grep input | awk '{ print $2 }')"
+MIC="$(cat ${FOLDER_CONFIG}/mic.txt)"
+RATE="$(cat ${FOLDER_CONFIG}/rate.txt)"
+CHANNEL="$(cat ${FOLDER_CONFIG}/channel.txt)"
+LEVEL="$(cat ${FOLDER_CONFIG}/level.txt)"
+DEVICE_LIST_LOADED="$(pactl list short modules | grep -e "latency_msec=1 sink=mic_raw_in" -e "mic_denoised_out" | cut -f1)"
+
+#############
+# First Run
+#############
+if [ -z "$MIC" ]
+then
+	MIC="$(echo "$MIC_LIST" | head -n1)"
+	echo "$MIC" > "${FOLDER_CONFIG}/mic.txt"
+fi
+
+if [ -z "$RATE" ]
+then
+	RATE="44100"
+	echo "$RATE" > "${FOLDER_CONFIG}/rate.txt"
+fi
+
+if [ -z "$CHANNEL" ]
+then
+	CHANNEL="1"
+	echo "$CHANNEL" > "${FOLDER_CONFIG}/channel.txt"
+fi
+
+if [ -z "$LEVEL" ]
+then
+	LEVEL="50"
+	echo "$LEVEL" > "${FOLDER_CONFIG}/level.txt"
+fi
+
+
+
+# Import BigControlCenter base modules / Importa os módulos básicos do BigControlCenter
+# That's include jquery and materialize / Isso inclui o jquery e o materialize
+# http://materializecss.com/
+. /usr/share/bigbashview/bcc/shell/base.sh
+
+  echo '
+  <body>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/usr/share/bigbashview/bcc/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/usr/share/bigbashview/bcc/materialize/css/materialize.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="/usr/share/bigbashview/bcc/materialize/js/jquery.js"></script>
+    <script src="/usr/share/bigbashview/bcc/materialize/js/materialize.js"></script>
+    <script src="/usr/share/bigbashview/bcc/js/big.js"></script>
+  </head>'
+  echo '<title>' $"Reduzir ruídos do microfone" '</title>'
+  echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'
+
+
+
+echo '<div id=page2>'
+echo '<div id="middle" class="bar"><h1>'
+
+  echo $"Esse filtro utiliza técnicas de redes neurais, isso pode utilizar um percentual grande da capacidade de processamento em computadores mais antigos."
+  echo "<br><br>"
+  echo $"Pode ser mais vantajoso ativar o plugin somente enquanto estiver utilizando o microfone e então desativa-lo para economizar recursos do sistema."
+  echo "<br><br>"
+  echo $"Se o microfone ainda estiver com muito ruído, experimente reduzir o volume do microfone para 50%."
+  echo "<br><br>"
+  
+  echo "<form name=noise action=make.sh.htm>"
+
+
+################
+# MIC
+################
+tooltip_mic=$"Se houver mais de um microfone nesse computador, selecione qual deseja reduzir os ruídos."
+tooltip_reload=$"Atualizar a lista de microfones."
+
+echo "<div id=mic>"
+echo "<label>" $"Escolha o microfone" "</label>"
+echo " <a href=index.sh.htm><img src=reload.png id=img-reload class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_reload\"></a>"
+echo "<select class=\"tooltipped with-gap browser-default\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_mic\" id=MIC name=MIC>"
+
+for i  in  $MIC_LIST; do
+
+	if [ "$i" = "$MIC" ]; then
+		echo "<option value=\"$i\" selected>$i</option>"
+	else
+		echo "<option value=\"$i\">$i</option>"
+	fi
+
+done
+echo '</select>'
+echo "</div>"
+
+
+#################
+# RATE
+#################
+tooltip_rate=$"A maioria dos microfones possui limite de frequência em 44100, alguns em 48000, quando os ruídos estão muito altos pode ser melhor reduzir o limite para 32000, os números maiores são utilizados quase exclusivamente para produção profissional em estúdios profissionais."
+
+echo "<div id=content>"
+echo "<div id=left class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_rate\">"
+echo "<label>" $"Frequência máxima" "</label>"
+echo "<select class=browser-default id=RATE name=RATE>"
+
+for i  in "192000" "96000" "48000" "44100" "32000"; do
+
+	if [ "$i" = "$RATE" ]; then
+		    echo "<option value=\"$i\" selected>$i</option>"
+	else
+	    echo "<option value=\"$i\">$i</option>"
+	fi
+
+done
+echo '</select>'
+echo "</div>"
+
+
+###############
+# CHANNEL
+###############
+
+tooltip_channel=$"Quase todos os microfones são Mono, mesmo os que são identificados como Stereo, geralmente estão apenas simulando um som Stereo."
+echo "<div id=center class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_channel\">"
+echo "<label>" $"Canais" "</label>"
+echo "<select class=browser-default id=CHANNEL name=CHANNEL>"
+
+for i  in "1" "2"; do
+
+	if [ "$i" = "1" ]; then
+		CHANNEL_NAME="Mono"
+	else
+		CHANNEL_NAME="Stereo"
+	fi
+
+	if [ "$i" = "$CHANNEL" ]; then
+	    echo "<option value=\"$i\" selected>$CHANNEL_NAME</option>"
+	else
+	    echo "<option value=\"$i\">$CHANNEL_NAME</option>"
+	fi
+
+done
+echo '</select>'
+echo "</div>"
+
+
+###############
+# LEVEL
+###############
+tooltip_level=$"Quanto maior a quantidade de ruídos, maior deve ser a intensidade do filtro."
+
+echo "<div id=right class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_level\">"
+echo "<label>" $"Intensidade do filtro" "</label>"
+echo "<select class=browser-default id=LEVEL name=LEVEL>"
+
+COUNT=1
+while [  $COUNT -lt 100 ]; do
+
+
+	if [ "$COUNT" = "$LEVEL" ]; then
+		echo "<option value=\"$COUNT\" selected>$COUNT</option>"
+	else
+		echo "<option value=\"$COUNT\">$COUNT</option>"
+	fi
+
+	let COUNT=COUNT+1; 
+
+done
+echo '</select>'
+echo "</div></div>"
+
+###############
+# AUTOSTART
+###############
+tooltip_autostart=$"Utilize sim para que o filtro seja ativado automaticamente ao efetuar login no sistema.<br><br>Se o microfone não estiver plugado e estiver marcado para iniciar o plugin automaticamente, não causará nenhum transtorno, o plugin apenas não será ativado."
+
+ echo "<div id=autostart class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_autostart\"><label>" $"Ativar automaticamente" "</label>"
+echo "<select class=browser-default id=AUTOSTART name=AUTOSTART>"
+
+#Confere se o arquivo, diretório, link, ou arquivo especial NÃO existe
+if [ ! -e "$HOME/.config/autostart/biglinux-noise-reduction.desktop" ]; then
+    AUTOSTART_CHECKED="checked"
+fi
+
+echo "<option value=\"1\">" $"Sim" "</option>"
+echo "<option value=\"0\" $AUTOSTART_CHECKED>" $"Não" "</option>"
+
+echo '</select></div>'
+
+
+
+echo "<div id=buttons>"
+
+if [ -z "$DEVICE_LIST_LOADED" ]
+then
+    ENABLE=$"Ativar"
+else
+    ENABLE=$"Alterar a configuração"
+	echo '<a class="waves-effect waves-light btn-large"' "href=\"make.sh.htm?disable=1\">" $"Desativar" '</a>'
+fi
+
+echo '<div id=theme2-2>
+<a class="waves-effect waves-light btn-large"' "href=\"javascript:noise.submit()\">" $ENABLE '</a>
+</form>'
+
+tooltip_pulse_clean=$"Alguns programas alteram a configuração de áudio presente na pasta .config/pulse e isso pode impedir o funcionamento do filtro de ruídos, utilize essa opção para remover essas configurações."
+echo "</div></div><div id=buttons>"
+echo "<a class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_pulse_clean\" onclick=\"_run('./pulse_clean.run')\" id=link_bottom_left>" $"Limpar as configurações de áudio." '</a>'
+
+tooltip_volume_config=$"Se for preciso efetuar mais configurações relativas ao áudio do sistema, utilize essa opção."
+echo "<a class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_volume_config\" onclick=\"_run('./volume_config.run')\" id=link_bottom_left>" $"Abrir o gerenciador de áudio." '</a>'
+
+
+
+echo "</div></div>"
+

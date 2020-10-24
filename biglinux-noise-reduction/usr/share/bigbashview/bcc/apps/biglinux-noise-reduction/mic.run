@@ -1,0 +1,7 @@
+#!/bin/bash
+
+kdialog --msgbox $"Tema aplicado!
+
+Finalize a sessão e faça login novamente
+Para que todos os programas utilizem a 
+nova configuração de tema." --title "Tema"

@@ -1,0 +1,10 @@
+Package: biglinux-noise-reduction
+Version: 1.0.0-1big1
+Depends: bigbashview, pulseaudio
+Architecture: all
+Maintainer: Bruno Goncalves <www.biglinux.com.br>
+Section: admin
+Priority: optional
+Installed-Size:516
+Description: Interface to enable or disable microphone noise reduction, using  ladspa plugin in pulseaudio, from https://github.com/werman/noise-suppression-for-voice
+

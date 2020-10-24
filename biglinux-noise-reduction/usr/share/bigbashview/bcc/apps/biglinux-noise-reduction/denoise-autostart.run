@@ -1,0 +1,14 @@
+#!/bin/bash
+
+
+sleep 15
+
+FOLDER_CONFIG="$HOME/.config/biglinux-noise-reduction"
+MIC="$(cat ${FOLDER_CONFIG}/mic.txt)"
+RATE="$(cat ${FOLDER_CONFIG}/rate.txt)"
+CHANNEL="$(cat ${FOLDER_CONFIG}/channel.txt)"
+LEVEL="$(cat ${FOLDER_CONFIG}/level.txt)"
+
+/usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/denoise.run "$MIC" "$RATE" "$CHANNEL" "$LEVEL"
+
+# alsa_input.usb-Logitech_Logitech_USB_Headset-00.multichannel-input 48000 2 50

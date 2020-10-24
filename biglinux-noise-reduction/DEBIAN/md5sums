@@ -1,0 +1,17 @@
+d41d8cd98f00b204e9800998ecf8427e  DEBIAN/md5sums
+b8c8d8e30eb4bf293240fd79d5180670  DEBIAN/control
+bfa4305c482ce1223a70859304ef7bc3  usr/lib/ladspa/librnnoise_ladspa.so
+e16a6dfacda54638036324ffeb661316  usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/bg.jpg
+7a164fda065b62eb34dba4a22a0308d7  usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/denoise_unload.run
+91dfe031f48bf058736433048ec9e5cc  usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/denoise.run
+6813685ab45c2c5e4f9f65c8b86ced70  usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/icon.png
+46bcf90a2ed07c0d922f4d7e5d20812c  usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/index.sh.htm
+c2efca1a9febbea45fb477c7d69991bc  usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/make.sh.htm
+4a6c8d9a2c5b31439c24b0e19c81f030  usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/mic.run
+476ea705b928105675c79b06be2ba3c0  usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/pulse_clean.run
+2f1152bbb837dfc17ea4243f12fb0e98  usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/reload.png
+1ea32b37f9e7ee90e9c8611772112b4e  usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/style.css
+12e13c313604e1218ffa7e339829c30e  usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/volume_config.run
+9749838e2e0113df1ed567329f8a008b  usr/share/bigbashview/bcc/apps/biglinux-noise-reduction/denoise-autostart.run
+2cfec4914c95e21a9578dcd05234b36d  usr/share/applications/biglinux-noise-reduction.desktop
+abdb9a886ab0fa1e0302a65c437d9878  usr/bin/biglinux-noise-reduction

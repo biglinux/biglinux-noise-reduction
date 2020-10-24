@@ -1,0 +1,28 @@
+#!/bin/bash
+
+DEVICE="$1"
+RATE="$2"
+CHANNEL="$3"
+LEVEL="$4"
+
+# If device don't detected just exit
+if [ "$(pactl list sources short | grep input | awk '{ print $2 }' | grep "$DEVICE")" = "" ]; then
+    exit
+fi
+
+
+if [ "$CHANNEL" = "1" ]; then
+    LABEL="noise_suppressor_mono"
+else
+    LABEL="noise_suppressor_stereo"
+fi
+
+kdialog --passivepopup "Ativando a redução de ruído do microfone." 5
+pacmd load-module module-null-sink sink_name=mic_denoised_out rate=$RATE
+pacmd load-module module-ladspa-sink sink_name=mic_raw_in sink_master=mic_denoised_out label=$LABEL plugin=/usr/lib/ladspa/librnnoise_ladspa.so control=$LEVEL
+pacmd load-module module-loopback latency_msec=1 sink=mic_raw_in rate=$RATE  source_dont_move=true sink_dont_move=true source=$DEVICE
+pacmd load-module module-remap-source source_name=denoised master=mic_denoised_out.monitor channels=$CHANNEL
+pacmd set-default-source mic_denoised_out.monitor
+
+# Example to use
+# alsa_input.usb-Logitech_Logitech_USB_Headset-00.multichannel-input 48000 2 50

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+DEVICE_LIST_LOADED="$(pactl list short modules | grep -e "latency_msec=1 sink=mic_raw_in" -e "mic_denoised_out" | cut -f1)"
+
+for i  in  $DEVICE_LIST_LOADED; do
+    pactl unload-module $i
+done
+

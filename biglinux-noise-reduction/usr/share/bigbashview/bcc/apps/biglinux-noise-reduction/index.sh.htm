@@ -83,13 +83,13 @@ echo '<div id="middle" class="bar"><h1>'
 ################
 # MIC
 ################
-tooltip_mic=$"Se houver mais de um microfone nesse computador, selecione qual deseja reduzir os ruídos."
-tooltip_reload=$"Atualizar a lista de microfones."
+tooltimic=$"Se houver mais de um microfone nesse computador, selecione qual deseja reduzir os ruídos."
+tooltireload=$"Atualizar a lista de microfones."
 
 echo "<div id=mic>"
 echo "<label>" $"Escolha o microfone" "</label>"
-echo " <a href=index.sh.htm><img src=reload.png id=img-reload class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_reload\"></a>"
-echo "<select class=\"tooltipped with-gap browser-default\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_mic\" id=MIC name=MIC>"
+echo " <a href=index.sh.htm><img src=reload.png id=img-reload class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltireload\"></a>"
+echo "<select class=\"tooltipped with-gap browser-default\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltimic\" id=MIC name=MIC>"
 
 for i  in  $MIC_LIST; do
 
@@ -107,10 +107,10 @@ echo "</div>"
 #################
 # RATE
 #################
-tooltip_rate=$"A maioria dos microfones possui limite de frequência em 44100, alguns em 48000, quando os ruídos estão muito altos pode ser melhor reduzir o limite para 32000, os números maiores são utilizados quase exclusivamente para produção profissional em estúdios profissionais."
+tooltirate=$"A maioria dos microfones possui limite de frequência em 44100, alguns em 48000, quando os ruídos estão muito altos pode ser melhor reduzir o limite para 32000, os números maiores são utilizados quase exclusivamente para produção profissional em estúdios profissionais."
 
 echo "<div id=content>"
-echo "<div id=left class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_rate\">"
+echo "<div id=left class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltirate\">"
 echo "<label>" $"Frequência máxima" "</label>"
 echo "<select class=browser-default id=RATE name=RATE>"
 
@@ -131,8 +131,8 @@ echo "</div>"
 # CHANNEL
 ###############
 
-tooltip_channel=$"Quase todos os microfones são Mono, mesmo os que são identificados como Stereo, geralmente estão apenas simulando um som Stereo."
-echo "<div id=center class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_channel\">"
+tooltichannel=$"Quase todos os microfones são Mono, mesmo os que são identificados como Stereo, geralmente estão apenas simulando um som Stereo."
+echo "<div id=center class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltichannel\">"
 echo "<label>" $"Canais" "</label>"
 echo "<select class=browser-default id=CHANNEL name=CHANNEL>"
 
@@ -158,9 +158,9 @@ echo "</div>"
 ###############
 # LEVEL
 ###############
-tooltip_level=$"Quanto maior a quantidade de ruídos, maior deve ser a intensidade do filtro."
+tooltilevel=$"Quanto maior a quantidade de ruídos, maior deve ser a intensidade do filtro."
 
-echo "<div id=right class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_level\">"
+echo "<div id=right class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltilevel\">"
 echo "<label>" $"Intensidade do filtro" "</label>"
 echo "<select class=browser-default id=LEVEL name=LEVEL>"
 
@@ -183,9 +183,9 @@ echo "</div></div>"
 ###############
 # AUTOSTART
 ###############
-tooltip_autostart=$"Utilize sim para que o filtro seja ativado automaticamente ao efetuar login no sistema.<br><br>Se o microfone não estiver plugado e estiver marcado para iniciar o plugin automaticamente, não causará nenhum transtorno, o plugin apenas não será ativado."
+tooltiautostart=$"Utilize sim para que o filtro seja ativado automaticamente ao efetuar login no sistema.<br><br>Se o microfone não estiver plugado e estiver marcado para iniciar o plugin automaticamente, não causará nenhum transtorno, o plugin apenas não será ativado."
 
- echo "<div id=autostart class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_autostart\"><label>" $"Ativar automaticamente" "</label>"
+ echo "<div id=autostart class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltiautostart\"><label>" $"Ativar automaticamente" "</label>"
 echo "<select class=browser-default id=AUTOSTART name=AUTOSTART>"
 
 #Confere se o arquivo, diretório, link, ou arquivo especial NÃO existe
@@ -214,12 +214,12 @@ echo '<div id=theme2-2>
 <a class="waves-effect waves-light btn-large"' "href=\"javascript:noise.submit()\">" $ENABLE '</a>
 </form>'
 
-tooltip_pulse_clean=$"Alguns programas alteram a configuração de áudio presente na pasta .config/pulse e isso pode impedir o funcionamento do filtro de ruídos, utilize essa opção para remover essas configurações."
+tooltipulse_clean=$"Alguns programas alteram a configuração de áudio presente na pasta .config/pulse e isso pode impedir o funcionamento do filtro de ruídos, utilize essa opção para remover essas configurações."
 echo "</div></div><div id=buttons>"
-echo "<a class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_pulse_clean\" onclick=\"_run('./pulse_clean.run')\" id=link_bottom_left>" $"Limpar as configurações de áudio." '</a>'
+echo "<a class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltipulse_clean\" onclick=\"_run('./pulse_clean.run')\" id=link_bottom_left>" $"Limpar as configurações de áudio." '</a>'
 
-tooltip_volume_config=$"Se for preciso efetuar mais configurações relativas ao áudio do sistema, utilize essa opção."
-echo "<a class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltip_volume_config\" onclick=\"_run('./volume_config.run')\" id=link_bottom_left>" $"Abrir o gerenciador de áudio." '</a>'
+tooltivolume_config=$"Se for preciso efetuar mais configurações relativas ao áudio do sistema, utilize essa opção."
+echo "<a class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltivolume_config\" onclick=\"_run('./volume_config.run')\" id=link_bottom_left>" $"Abrir o gerenciador de áudio." '</a>'
 
 
 
